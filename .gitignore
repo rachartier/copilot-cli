@@ -1,0 +1,85 @@
+# Generate a comprehensive .gitignore file for a Python project
+
+# Python-specific files and directories
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# IDE and editor files
+# - VS Code
+.vscode/
+# - IntelliJ IDEA
+.idea/
+# - Eclipse
+.project
+.classpath
+# - Sublime Text
+sublime-project
+sublime-workspace
+
+# OS-specific files
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+*.swp
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+# Linux
+*~
+.nfs*
+
+# Build output and dependency directories
+# - Pipenv
+Pipfile.lock
+# - Poetry
+poetry.lock
+# - Virtualenv
+env/
+venv/
+ENV/
+ENV*/
+.env
+.venv
+# - Others
+.mypy_cache/
+.pytest_cache/
+
+# Environment and configuration files
+# - Environment variables
+.env
+.env.*
+# - Configuration files
+*.config
+*.cfg
+*.ini
+*.toml
+
+# Temporary and cache files
+*.temp
+*.tmp
+*.log
+*.cache
+*.bak
+*.swp
+
+# Commonly used test coverage and documentation tool outputs
+# - Coverage
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+# - Documentation
+build/
+docs/_build/
+
+# General
+!README.md
