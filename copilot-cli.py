@@ -117,6 +117,10 @@ def main() -> None:
         action_obj = action_manager.get_action(args.action)
 
         current_prompt = action_obj.prompt
+
+        if args.prompt:
+            current_prompt += f"## User prompt:\n{args.prompt}"
+
         system_prompt = action_obj.system_prompt
         model = action_obj.model or args.model
 
