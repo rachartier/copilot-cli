@@ -8,7 +8,7 @@ from args import Args
 from constants import DEFAULT_SYSTEM_PROMPT
 from copilot import GithubCopilotClient
 
-action_manager = ActionManager()
+action_manager = ActionManager("./actions.yml")
 
 
 OnCompleteCallable = Callable[[str, Args], None]
@@ -97,8 +97,16 @@ def handle_completion(
         if on_complete is not None:
             on_complete(response, args)
 
-        if action_obj and action_obj.output_to_stdout:
-            print(response)
+        if action_obj:
+            if action_obj.output.to_stdout:
+                print(response)
+            if action_obj.output.to_file:
+                file = action_obj.output.to_file
+                file = file.replace("$path", args.path)
+
+                with open(action_obj.output.to_file, "w") as f:
+                    _ = f.write(response)
+
     else:
         print(response)
 

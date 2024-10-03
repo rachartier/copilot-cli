@@ -4,6 +4,11 @@ from typing_extensions import Callable
 from args import Args
 
 
+class Output(BaseModel):
+    to_stdout: bool
+    to_file: str | None = None
+
+
 class Action(BaseModel):
     description: str
     prompt: str
@@ -11,4 +16,4 @@ class Action(BaseModel):
     model: str
     commands: dict[str, list[str]] | None = None
     on_complete: Callable[[str, Args], None] | None = None
-    output_to_stdout: bool = True
+    output: Output
