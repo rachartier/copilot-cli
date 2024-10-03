@@ -2,7 +2,8 @@ import argparse
 import subprocess
 from typing import Callable
 
-from action import Action, ActionManager
+from action.action_manager import ActionManager
+from action.model import Action
 from args import Args
 from constants import DEFAULT_SYSTEM_PROMPT
 from copilot import GithubCopilotClient
