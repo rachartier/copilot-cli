@@ -1,85 +1,150 @@
-# Generate a comprehensive .gitignore file for a Python project
-
-# Python-specific files and directories
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+# Usually these files are written by a python script from a template
+# before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+doc/man/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pyright type checker
+.pyright/
+
+# Universal virtualenv
+pipenv/
+pipfile.lock
 
 # IDE and editor files
-# - VS Code
+
+# VS Code
 .vscode/
-# - IntelliJ IDEA
+.history
+
+# JetBrains IDEs
 .idea/
-# - Eclipse
-.project
-.classpath
-# - Sublime Text
-sublime-project
-sublime-workspace
+*.sublime-project
+*.sublime-workspace
+
+# Eclipse
+.metadata/
+*.log
 
 # OS-specific files
+
 # macOS
 .DS_Store
 .AppleDouble
 .LSOverride
-._*
-.Spotlight-V100
-.Trashes
-*.swp
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.lnk
+
 # Linux
 *~
-.nfs*
+.trash-*/
 
-# Build output and dependency directories
-# - Pipenv
-Pipfile.lock
-# - Poetry
-poetry.lock
-# - Virtualenv
-env/
-venv/
-ENV/
-ENV*/
-.env
-.venv
-# - Others
-.mypy_cache/
-.pytest_cache/
-
-# Environment and configuration files
-# - Environment variables
-.env
-.env.*
-# - Configuration files
-*.config
-*.cfg
-*.ini
-*.toml
-
-# Temporary and cache files
-*.temp
-*.tmp
-*.log
-*.cache
-*.bak
-*.swp
-
-# Commonly used test coverage and documentation tool outputs
-# - Coverage
-.coverage
-coverage.xml
-*.cover
-.hypothesis/
-# - Documentation
-build/
-docs/_build/
-
-# General
-!README.md
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ntuser.dat
+ntuser.dat.LOG1
+ntuser.dat.LOG2
+ntuser.dat{,.TM.blf,.TMContainer00000000000000000001.regtrans-ms,.TMContainer00000000000000000002.regtrans-ms}
+BOOTNXT
