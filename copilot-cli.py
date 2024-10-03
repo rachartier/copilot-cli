@@ -1,6 +1,5 @@
 import argparse
 import subprocess
-from typing import Callable
 
 from copilot_cli.action.action_manager import ActionManager
 from copilot_cli.action.model import Action
@@ -10,9 +9,6 @@ from copilot_cli.copilot import GithubCopilotClient
 from copilot_cli.log import CopilotCLILogger
 
 action_manager = ActionManager("./actions.yml")
-
-
-OnCompleteCallable = Callable[[str, Args], None]
 
 
 def run_command(cmd: list[str]) -> subprocess.CompletedProcess[str]:
@@ -93,10 +89,6 @@ def handle_completion(
     response = client.chat_completion(prompt, model, system_prompt)
 
     if action_obj:
-        on_complete: OnCompleteCallable | None = getattr(action_obj, "on_complete", None)
-        if on_complete is not None:
-            on_complete(response, args)
-
         if action_obj:
             if action_obj.output.to_stdout:
                 print(response)
@@ -107,7 +99,6 @@ def handle_completion(
                 with open(file, "w") as f:
                     _ = f.write(response)
                     CopilotCLILogger.log_success(f"Output written to {file}")
-
     else:
         print(response)
 
