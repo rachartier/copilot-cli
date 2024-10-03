@@ -29,10 +29,10 @@ actions:
       4. Review and adjust as needed
 
       Sample prompt for a Python project:
-      # Generate a comprehensive .gitignore file for a Python project
+      # Generate a .gitignore for a Python project
 
       Sample prompt for multiple languages:
-      # Generate a comprehensive .gitignore file for a Python, Java, Node.js project
+      # Generate a .gitignore for a Python, Java, Node.js project
     prompt: ""
     model: "gpt-4o"
     output:

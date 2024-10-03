@@ -129,7 +129,7 @@ def main() -> None:
         current_prompt = action_obj.prompt
 
         if args.prompt:
-            current_prompt += f"## User prompt:\n{args.prompt}"
+            current_prompt += f"\n{args.prompt}"
 
         system_prompt = action_obj.system_prompt
         model = action_obj.model or args.model
