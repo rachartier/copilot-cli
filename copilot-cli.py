@@ -2,11 +2,11 @@ import argparse
 import subprocess
 from typing import Callable
 
-from action.action_manager import ActionManager
-from action.model import Action
-from args import Args
-from constants import DEFAULT_SYSTEM_PROMPT
-from copilot import GithubCopilotClient
+from copilot_cli.action.action_manager import ActionManager
+from copilot_cli.action.model import Action
+from copilot_cli.args import Args
+from copilot_cli.constants import DEFAULT_SYSTEM_PROMPT
+from copilot_cli.copilot import GithubCopilotClient
 
 action_manager = ActionManager("./actions.yml")
 
@@ -74,7 +74,6 @@ def process_action_commands(
             result = run_command(cmd_with_path)
             final_prompt = final_prompt.replace(f"${key}", result.stdout)
         except subprocess.CalledProcessError as e:
-            print(result.stdout)
             print(f"Command failed for {key}")
             print(f"Error: {e}")
             raise

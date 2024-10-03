@@ -30,7 +30,7 @@ Copilot CLI is a command-line interface for interacting with GitHub Copilot's ch
 To use the Copilot CLI, run the `copilot-cli.py` script with the desired arguments:
 
 ```sh
-python copilot-cli.py --prompt "Your prompt here" --model "gpt-4o"
+python main.py --prompt "Your prompt here" --model "gpt-4o"
 ```
 
 ### Arguments
@@ -44,12 +44,12 @@ python copilot-cli.py --prompt "Your prompt here" --model "gpt-4o"
 ### Example
 
 ```sh
-python copilot-cli.py --prompt "Explain the concept of recursion"
+python main.py --prompt "Explain the concept of recursion"
 ```
 
 #### Actions
 ```sh
-python copilot-cli.py --action "gitignore" --prompt "Write a gitignore for Python" --path "/path/to/project"
+python main.py --action "gitignore" --prompt "Write a gitignore for Python" --path "/path/to/project"
 ```
 
 ## Acknowledgements

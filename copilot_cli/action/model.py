@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing_extensions import Callable
 
-from args import Args
+from ..args import Args
 
 
 class Output(BaseModel):

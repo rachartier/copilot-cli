@@ -1,7 +1,7 @@
 import yaml
 from pydantic import BaseModel
 
-from action.model import Action
+from .model import Action
 
 
 class ActionsYAML(BaseModel):

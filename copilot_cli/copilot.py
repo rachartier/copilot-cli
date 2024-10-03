@@ -17,8 +17,8 @@ import requests
 from pydantic import BaseModel
 from requests.exceptions import RequestException
 
-from exception.api_error import APIError
-from exception.authentication_error import AuthenticationError
+from .exception.api_error import APIError
+from .exception.authentication_error import AuthenticationError
 
 
 class HostsData(BaseModel):

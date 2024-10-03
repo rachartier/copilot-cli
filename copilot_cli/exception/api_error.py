@@ -1,4 +1,4 @@
-from exception.copilot_client_error import CopilotClientError
+from .copilot_client_error import CopilotClientError
 
 
 class APIError(CopilotClientError):
