@@ -7,6 +7,7 @@ from copilot_cli.action.model import Action
 from copilot_cli.args import Args
 from copilot_cli.constants import DEFAULT_SYSTEM_PROMPT
 from copilot_cli.copilot import GithubCopilotClient
+from copilot_cli.log import CopilotCLILogger
 
 action_manager = ActionManager("./actions.yml")
 
@@ -103,8 +104,9 @@ def handle_completion(
                 file = action_obj.output.to_file
                 file = file.replace("$path", args.path)
 
-                with open(action_obj.output.to_file, "w") as f:
+                with open(file, "w") as f:
                     _ = f.write(response)
+                    CopilotCLILogger.log_success(f"Output written to {file}")
 
     else:
         print(response)
