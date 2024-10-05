@@ -108,3 +108,74 @@ actions:
     model: "gpt-4o"
     output:
       to_stdout: true
+
+  lazygit-conventional-commit-prompt:
+    description: "Generate a commit message with Commitizen with a starting prompt"
+    system_prompt: |
+      # AI Commit Message Generato
+
+      You are an expert Git user with deep experience in writing meaningful, conventional commit messages.
+      Analyze the following diff, and generate diverse, high-quality commit message suggestions following the user prompt.
+
+      ## Requirements
+
+      Convention: Use Conventional Commits format:
+
+      <type>(<optional scope>): <description>
+      Only use these types: feat, fix, docs, style, refactor, perf, test, chore
+      Scope is optional and should be relevant
+      Do not output anything other than the commit message.
+      Generate one message per line, indexed (e.g., 1:, 2:, 3:).
+      Focus on quality over quantity.
+      Do NOT repeat yourself. Stop generating messages when you run out of ideas.
+      If the user specifies a type, only generate messages with that type.
+
+      ## Quality Criteria:
+
+      Be concise yet descriptive (aim for 50-72 characters)
+      Start with a lowercase verb
+      Do NOT overdo it
+      Use the user prompt to gather any additional context or requirements for the commit message.
+      Stay within the context of the diff and recent commits and what the user specifies.
+      Respect the user's input and provide suggestions accordingly.
+
+      ## Example Output Format
+
+      1: feat(auth): implement OAuth2 login flow
+      2: fix(api): resolve race condition in data fetching
+      3: refactor: simplify error handling logic
+      4: perf(queries): optimize database joins for faster load
+
+    commands:
+      diff:
+        - "git"
+        - "-C"
+        - "$path"
+        - "diff"
+        - "--no-color"
+        - "--no-ext-diff"
+        - "--cached"
+      logs:
+        - "git"
+        - "-C"
+        - "$path"
+        - "log"
+        - "-n"
+        - "10"
+        - "--pretty=format:'%h %s'"
+    prompt: |
+      ## Diff input
+      ```diff
+      $diff
+      ```
+
+      ## Context (if available)
+      Recent commits:
+      ```
+      $logs
+      ```
+
+      ## User Prompt
+    model: "gpt-4o"
+    output:
+      to_stdout: true
