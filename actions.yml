@@ -28,9 +28,9 @@ actions:
       to_file: "$path/.gitignore"
 
   lazygit-conventional-commit:
-    description: "Generate a commit message with Commitizen"
+    description: "Generate a commit message with Conventional Commit format"
     system_prompt: |
-      # AI Commit Message Generato
+      # AI Commit Message Generator
 
       You are an expert Git user with deep experience in writing meaningful, conventional commit messages. Analyze the following diff and generate diverse, high-quality commit message suggestions.
 
@@ -110,9 +110,9 @@ actions:
       to_stdout: true
 
   lazygit-conventional-commit-prompt:
-    description: "Generate a commit message with Commitizen with a starting prompt"
+    description: "Generate a commit message with Conventional Commit format based on user prompt"
     system_prompt: |
-      # AI Commit Message Generato
+      # AI Commit Message Generator
 
       You are an expert Git user with deep experience in writing meaningful, conventional commit messages.
       Analyze the following diff, and generate diverse, high-quality commit message suggestions following the user prompt.
