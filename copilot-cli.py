@@ -37,7 +37,7 @@ def create_parser() -> argparse.ArgumentParser:
         "--model",
         type=str,
         help="Model to use for the chat",
-        default="gpt-4",
+        default="gpt-4o",
     )
     _ = parser.add_argument(
         "--system_prompt",

@@ -18,7 +18,7 @@ actions:
       - Sort entries alphabetically within sections
       - Include commonly used test coverage and documentation tool outputs
       - Do not output ``` or code blocks
-      - Ony output the .gitignore content, no additional text.
+      - Only output the .gitignore content, no additional text.
 
       Use the user prompt to gather any additional context or requirements for the gitignore file.
     prompt: ""
@@ -94,7 +94,7 @@ actions:
         - "10"
         - "--pretty=format:'%h %s'"
     prompt: |
-      ## Input
+      ## Diff input
       ```diff
       $diff
       ```
