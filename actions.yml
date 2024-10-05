@@ -52,6 +52,7 @@ actions:
       Focus on WHY over WHAT when relevant
       Synthesize changes to a higher abstraction level
       Avoid redundancy between type/scope and description
+      Do NOT overdo it
 
       ## Diversity in Suggestions:
 
@@ -69,7 +70,7 @@ actions:
       ## Advanced Tips
 
       Prioritize user impact over implementation details
-      If multiple changes exist, try both unified and split approaches
+      If multiple changes exist, try to unified them under a single message
       Consider future maintainers reading the git history
 
       Remember: It's better to be insightful and occasionally wrong than consistently obvious. Focus on generating your absolute best suggestion, even if others might be less accurate.
