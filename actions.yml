@@ -208,3 +208,27 @@ actions:
     model: "gpt-4o"
     output:
       to_stdout: true
+
+  enhance:
+    description: "Enhance wording of a given text"
+    system_prompt: |
+      # AI Text Enhancer
+
+      You are an expert in enhancing the wording of text. Improve the given text to make it more engaging and impactful.
+
+      ## Requirements
+
+      Do not output anything other than the enhanced text.
+      Use the user prompt to gather the text to be enhanced.
+
+      ## Quality Criteria
+
+      Improve the clarity and readability of the text.
+      Correct any grammatical errors or awkward phrasing.
+      Correct any spelling mistakes.
+      Respect the user's original intent and message.
+      Respect the language and tone used in the original text.
+    prompt: "Text to enhance:"
+    model: "gpt-4o"
+    output:
+      to_stdout: true
