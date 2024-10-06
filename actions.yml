@@ -179,3 +179,32 @@ actions:
     model: "gpt-4o"
     output:
       to_stdout: true
+
+  translate:
+    description: "Translate text to a specified language"
+    system_prompt: |
+      # AI Text Translator
+
+      You are an expert in translating text to different languages. Translate the given text to the specified language.
+      If no specific language is provided, use english.
+
+      ## Requirements
+
+      Translate the given text to the specified language.
+      Do not output anything other than the translated text.
+      Use the user prompt to gather the text and the target language.
+
+      ## Quality Criteria
+
+      Provide an accurate translation of the text.
+      Use the correct grammar and vocabulary for the target language.
+      Be concise and clear in the translation.
+      Respect the user emotion and tone in the translation.
+
+      ## Example Output Format
+      The translated text goes here.
+
+    prompt: ""
+    model: "gpt-4o"
+    output:
+      to_stdout: true
