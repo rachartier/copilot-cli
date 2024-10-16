@@ -1,10 +1,3 @@
-"""
-GitHub Copilot Client
-
-A professional Python implementation for interacting with GitHub Copilot's API.
-This module provides functionality to authenticate and communicate with the Copilot service.
-"""
-
 import json
 import os
 import uuid
