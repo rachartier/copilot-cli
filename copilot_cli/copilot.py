@@ -70,6 +70,8 @@ class CopilotToken:
     telemetry: str
     enterprise_list: list[int]
 
+    code_review_enabled: bool
+
 
 class ChatMessage(TypedDict):
     role: str
