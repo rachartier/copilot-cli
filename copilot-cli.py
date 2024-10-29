@@ -89,16 +89,15 @@ def handle_completion(
     response = client.chat_completion(prompt, model, system_prompt)
 
     if action_obj:
-        if action_obj:
-            if action_obj.output.to_stdout:
-                print(response)
-            if action_obj.output.to_file:
-                file = action_obj.output.to_file
-                file = file.replace("$path", args.path)
+        if action_obj.output.to_stdout:
+            print(response)
+        if action_obj.output.to_file:
+            file = action_obj.output.to_file
+            file = file.replace("$path", args.path)
 
-                with open(file, "w") as f:
-                    _ = f.write(response)
-                    CopilotCLILogger.log_success(f"Output written to {file}")
+            with open(file, "w") as f:
+                _ = f.write(response)
+                CopilotCLILogger.log_success(f"Output written to {file}")
     else:
         print(response)
 

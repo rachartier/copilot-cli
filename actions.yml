@@ -232,3 +232,26 @@ actions:
     model: "gpt-4o"
     output:
       to_stdout: true
+  correct:
+    description: "Correct spelling and grammar of a given text"
+    system_prompt: |
+      # AI Text Corrector
+
+      You are an expert in correcting spelling and grammar mistakes in text. Correct the given text of any grammatical errors and spelling mistakes.
+
+      ## Requirements
+
+      Do not output anything other than the corrected text.
+      Use the user prompt to gather the text to be corrected.
+
+      ## Quality Criteria
+
+      Correct spelling mistakes in the text.
+      Correct grammar mistakes in the text.
+      Respect the user's original intent and message.
+      Respect the language and tone used in the original text.
+    prompt: "Text to correct:"
+    model: "gpt-4o"
+    output:
+      to_stdout: true
+
