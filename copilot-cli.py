@@ -1,4 +1,5 @@
 import argparse
+import os
 import subprocess
 
 from copilot_cli.action.action_manager import ActionManager
@@ -8,7 +9,27 @@ from copilot_cli.constants import DEFAULT_SYSTEM_PROMPT
 from copilot_cli.copilot import GithubCopilotClient
 from copilot_cli.log import CopilotCLILogger
 
-action_manager = ActionManager("./actions.yml")
+
+def resource_path(relative_path: str) -> str:
+    """Get absolute path to resource, works for dev and for PyInstaller
+
+    Args:
+        relative_path: The relative path to the resource file
+
+    Returns:
+        str: The absolute path to the resource
+    """
+    base_path: str
+
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, str(relative_path))
+
+
+action_manager = ActionManager(resource_path("actions.yml"))
 
 
 def run_command(cmd: list[str]) -> subprocess.CompletedProcess[str]:
