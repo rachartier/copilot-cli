@@ -13,28 +13,76 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        LATEST_TAG=$(git describe --tags --abbrev=0 HEAD)
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+        if [ -z "$PREVIOUS_TAG" ]; then
+          # S'il n'y a pas de tag précédent, prendre tous les commits
+          echo "## 🚀 Changes in $LATEST_TAG" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          # Features
+          echo "### ✨ Features" >> CHANGELOG.md
+          git log --no-merges --format="* %s (%h)" | grep "^* feat" >> CHANGELOG.md || true
+          echo "" >> CHANGELOG.md
+
+          # Fixes
+          echo "### 🐛 Bug Fixes" >> CHANGELOG.md
+          git log --no-merges --format="* %s (%h)" | grep "^* fix" >> CHANGELOG.md || true
+          echo "" >> CHANGELOG.md
+
+          # Other changes
+          echo "### 🔄 Other Changes" >> CHANGELOG.md
+          git log --no-merges --format="* %s (%h)" | grep -v "^* feat\|^* fix" >> CHANGELOG.md || true
+        else
+          echo "## 🚀 Changes in $LATEST_TAG" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          # Features
+          echo "### ✨ Features" >> CHANGELOG.md
+          git log --no-merges --format="* %s (%h)" ${PREVIOUS_TAG}..HEAD | grep "^* feat" >> CHANGELOG.md || true
+          echo "" >> CHANGELOG.md
+
+          # Fixes
+          echo "### 🐛 Bug Fixes" >> CHANGELOG.md
+          git log --no-merges --format="* %s (%h)" ${PREVIOUS_TAG}..HEAD | grep "^* fix" >> CHANGELOG.md || true
+          echo "" >> CHANGELOG.md
+
+          # Other changes
+          echo "### 🔄 Other Changes" >> CHANGELOG.md
+          git log --no-merges --format="* %s (%h)" ${PREVIOUS_TAG}..HEAD | grep -v "^* feat\|^* fix" >> CHANGELOG.md || true
+        fi
+
+        CHANGELOG=$(cat CHANGELOG.md)
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    
+
     - name: Build with PyInstaller
       run: |
         pyinstaller --onefile copilot-cli.py --add-data ./actions.yml:.
-    
+
     - name: Create tar.gz archive
       run: |
         cd dist
         tar -czf copilot-cli.tar.gz *
         mv copilot-cli.tar.gz ../
-    
+
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
