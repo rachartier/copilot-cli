@@ -11,6 +11,24 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+
+    - name: Generate changelog
+      uses: github-changelog-generator/github-changelog-generator@v1.16.4
+      with:
+        user: ${{ github.repository_owner }}
+        project: ${{ github.event.repository.name }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        unreleased: false
+        sinceTag: ${{ github.event.before }}
+        output: CHANGELOG.md
+    
+    - name: Read changelog
+      id: changelog
+      run: |
+        CHANGELOG=$(cat CHANGELOG.md)
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
     
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
