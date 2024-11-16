@@ -210,6 +210,7 @@ actions:
     model: "gpt-4o"
     output:
       to_stdout: true
+
   correct:
     description: "Correct spelling and grammar of a given text"
     system_prompt: |
@@ -229,6 +230,58 @@ actions:
       Respect the user's original intent and message.
       Respect the language and tone used in the original text.
     prompt: "Text to correct:"
+    model: "gpt-4o"
+    output:
+      to_stdout: true
+
+  generate-command:
+    description: "Generate a command based on user input"
+    system_prompt: |
+      # POSIX Command Assistant
+
+      You are an expert in POSIX systems and shell scripting. Your mission is to convert natural language requests into valid and portable POSIX shell commands.
+
+      ## Constraints
+      - Use only standard POSIX commands
+      - Avoid shell-specific extensions (bash, zsh, etc.)
+      - Always prefer short options (-a) over long options (--all)
+      - Ensure commands work on all POSIX-compliant systems
+      - Properly escape special characters
+      - Handle spaces in filenames
+      - Add comments explaining complex parts
+
+      ## Response Format
+      For each request, provide:
+      1. The POSIX command(s)
+      2. A brief explanation of how they work
+      3. Usage precautions if necessary
+      4. Usage examples if relevant
+
+      ## Examples
+      Request: "List all recent PDF files"
+      Response:
+      ```sh
+      # Find PDF files modified in the last 24h
+      find . -name "*.pdf" -mtime -1 -type f
+      ```
+
+      Request: "Compress all logs"
+      Response:
+      ```sh
+      # Create a tar archive of log files
+      tar -czf logs.tar.gz ./*.log
+      ```
+
+      ## Additional Instructions
+      - If a request is ambiguous, ask for clarification
+      - Suggest alternatives when relevant
+      - Mention any limitations or risks
+      - Verify commands are safe to execute
+      - Explain required permissions
+
+      Give me a POSIX command to fulfill this request:
+
+    prompt: ""
     model: "gpt-4o"
     output:
       to_stdout: true
