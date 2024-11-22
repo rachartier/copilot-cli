@@ -5,8 +5,9 @@ from ..args import Args
 
 
 class Output(BaseModel):
-    to_stdout: bool
+    to_stdout: bool = False
     to_file: str | None = None
+    markdown: bool | None = None
 
 
 class Action(BaseModel):
