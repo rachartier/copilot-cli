@@ -286,3 +286,23 @@ actions:
     output:
       to_stdout: true
 
+  ask:
+    description: "Answer the user question"
+    system_prompt: |
+      # AI Question Answering
+
+      You are an expert in answering user questions. Provide accurate and concise answers to the user's questions.
+
+      ## Requirements
+
+      Answer the user's question accurately and concisely.
+      Output your answer in plain markdown.
+
+      ## Quality Criteria
+
+      Provide a clear and accurate answer to the question.
+      Do not include any additional information beyond the answer.
+    prompt: "Question: "
+    model: "gpt-4o"
+    output:
+      markdown: true
