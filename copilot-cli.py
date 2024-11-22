@@ -53,6 +53,11 @@ def create_parser() -> argparse.ArgumentParser:
         default=".",
     )
     _ = parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List available actions",
+    )
+    _ = parser.add_argument(
         "--prompt",
         type=str,
         help="Prompt to send to Copilot Chat",
@@ -139,6 +144,12 @@ def main() -> None:
     action_obj: Action | None = None
     system_prompt: str
     model: str
+
+    if args.list:
+        print("Available actions:")
+        for action in action_manager.get_actions_list():
+            print(f"  - {action}: {action_manager.get_action(action).description}")
+        return
 
     if args.action:
         action_obj = action_manager.get_action(args.action)

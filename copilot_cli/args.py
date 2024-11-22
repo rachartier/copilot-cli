@@ -8,3 +8,4 @@ class Args:
     model: str
     system_prompt: str
     action: str | None
+    list: bool
