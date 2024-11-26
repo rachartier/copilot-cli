@@ -43,6 +43,8 @@ actions:
       Scope is optional
       Start description with an imperative verb
 
+      If there is lots of different changes, try to generate one commit which summarizes all the changes.
+
       Example of quality over quantity (notice only 5 messages):
       1: feat(auth): add OAuth2 authentication
       2: fix(api): resolve null pointer in user service
@@ -106,6 +108,8 @@ actions:
       Only add a new message if it's substantially different from others
       Scope is optional
       Start description with an imperative verb
+
+      If there is lots of different changes, try to generate one commit which summarizes all the changes.
 
       Example of quality over quantity (notice only 5 messages):
       1: feat(auth): add OAuth2 authentication
