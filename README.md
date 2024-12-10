@@ -52,6 +52,45 @@ python copilot-cli.py --prompt "Explain the concept of recursion"
 python copilot-cli.py --action "gitignore" --prompt "Write a gitignore for Python" --path "/path/to/project"
 ```
 
+## Extras
+
+### Adding copilot-cli to LazyGit
+
+In `~/.config/lazygit/config.yml` add the following snippets:
+```yaml
+customCommands:
+  - key: "<c-a>" # ctrl + a
+    description: "Generate commit message"
+    context: "files"
+    loadingText: "Generating commit message..."
+    subprocess: true
+    prompts:
+      - type: "menuFromCommand"
+        title: "Copilot AI Convention Commit"
+        key: "Msg"
+        command: copilot-cli --action "lazygit-conventional-commit" --path "."
+        filter: '^(?P<number>\d+):\s(?P<type>\w+)(?:\((?P<scope>[^)]+)\))?:\s(?P<message>.+)$'
+        valueFormat: "{{ .type }}{{ if .scope }}({{ .scope }}){{ end }}: {{ .message }}"
+        labelFormat: "{{ .type | red }}{{ if .scope }}({{ .scope }}){{ end }}: {{ .message | green }}"
+      - type: "menu"
+        key: "Confirm"
+        title: "Confirm/Edit commit message"
+        options:
+          - name: "Commit"
+            value: "commit"
+          - name: "Edit"
+            value: "edit"
+    command: >
+      {{- if eq .Form.Confirm "commit" -}}
+        git commit -m '{{.Form.Msg}}'
+      {{- else if eq .Form.Confirm "edit" -}}
+        git commit -e -m '{{.Form.Msg}}'
+      {{- else -}}
+        echo "Commit cancelled" && exit 0
+      {{- end -}}
+```
+It will enable generations of commits messages for staged changed when you press `<CTRL-A>`.
+
 ## Acknowledgements
 
 - [GitHub Copilot](https://github.com/features/copilot)
