@@ -1,7 +1,6 @@
 import json
 import os
 import uuid
-from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import TypedDict
@@ -39,11 +38,13 @@ class Headers:
     }
 
 
-@dataclass(frozen=True)
-class CopilotToken:
+class CopilotToken(BaseModel):
     """
     Represents a GitHub Copilot authentication token and its associated metadata.
     """
+
+    class Config:
+        extra = "allow"
 
     token: str
     expires_at: int
@@ -62,7 +63,6 @@ class CopilotToken:
     nes_enabled: bool
     prompt_8k: bool
     snippy_load_test_enabled: bool
-    vsc_electron_fetcher: bool
     xcode: bool
     xcode_chat: bool
 
