@@ -11,6 +11,7 @@ from copilot_cli.args import Args
 from copilot_cli.constants import DEFAULT_SYSTEM_PROMPT
 from copilot_cli.copilot import GithubCopilotClient
 from copilot_cli.log import CopilotCLILogger
+from copilot_cli.streamer.markdown import MarkdownStreamer, StreamOptions
 
 
 def resource_path(relative_path: str) -> str:
@@ -80,6 +81,11 @@ def create_parser() -> argparse.ArgumentParser:
         help="Action to perform",
         choices=action_manager.get_actions_list(),
     )
+    _ = parser.add_argument(
+        "--nostream",
+        action="store_true",
+        help="Disable streaming",
+    )
     return parser
 
 
@@ -107,6 +113,22 @@ def process_action_commands(
     return final_prompt
 
 
+def create_streamer(options: StreamOptions | None = None) -> MarkdownStreamer:
+    """
+    Create a configured markdown streamer.
+
+    Args:
+        options: Optional dictionary of console options
+
+    Returns:
+        Configured MarkdownStreamer instance
+    """
+    streamer = MarkdownStreamer()
+    if options:
+        streamer.set_console_options(**options)
+    return streamer
+
+
 def handle_completion(
     client: GithubCopilotClient,
     prompt: str,
@@ -114,12 +136,17 @@ def handle_completion(
     system_prompt: str,
     action_obj: Action | None,
     args: Args,
+    stream_options: StreamOptions | None = None,
 ) -> None:
-    response = client.chat_completion(prompt, model, system_prompt)
+    if not args.nostream and action_obj and action_obj.stream:
+        streamer = create_streamer(stream_options)
+        streamer.stream(client.stream_chat_completion(prompt=prompt, model=model, system_prompt=system_prompt))
+
+        response = streamer.get_content()
+    else:
+        response = client.chat_completion(prompt=prompt, model=model, system_prompt=system_prompt)
 
     if action_obj:
-        if action_obj.output.to_stdout:
-            print(response)
         if action_obj.output.to_file:
             file = action_obj.output.to_file
             file = file.replace("$path", args.path)
@@ -127,9 +154,8 @@ def handle_completion(
             with open(file, "w") as f:
                 _ = f.write(response)
                 CopilotCLILogger.log_success(f"Output written to {file}")
-        if action_obj.output.markdown:
+        if args.nostream or not action_obj.stream:
             Console().print(Markdown(response))
-
     else:
         print(response)
 
@@ -174,18 +200,14 @@ def main() -> None:
         system_prompt = args.system_prompt
         model = args.model
 
-    try:
-        handle_completion(
-            client,
-            current_prompt,
-            model,
-            system_prompt,
-            action_obj,
-            args,
-        )
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        print(f"At line: {e.__traceback__.tb_lineno}")
+    handle_completion(
+        client,
+        current_prompt,
+        model,
+        system_prompt,
+        action_obj,
+        args,
+    )
 
 
 if __name__ == "__main__":

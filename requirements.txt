@@ -1,7 +1,10 @@
 annotated-types==0.7.0
 certifi==2024.8.30
 charset-normalizer==3.3.2
+colorama==0.4.6
+halo==0.0.31
 idna==3.10
+log-symbols==0.0.14
 markdown-it-py==3.0.0
 mdurl==0.1.2
 pydantic==2.9.2
@@ -10,5 +13,8 @@ Pygments==2.18.0
 PyYAML==6.0.2
 requests==2.32.3
 rich==13.8.1
+six==1.17.0
+spinners==0.0.24
+termcolor==2.5.0
 typing_extensions==4.12.2
 urllib3==2.2.3

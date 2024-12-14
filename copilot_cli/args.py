@@ -8,4 +8,5 @@ class Args:
     model: str
     system_prompt: str
     action: str | None
+    nostream: bool
     list: bool

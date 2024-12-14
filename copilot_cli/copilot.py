@@ -1,11 +1,13 @@
 import json
 import os
 import uuid
+from collections.abc import Iterator
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import TypedDict
 
 import requests
+from halo import Halo
 from pydantic import BaseModel
 from requests.exceptions import RequestException
 
@@ -134,6 +136,7 @@ class GithubCopilotClient:
             self._oauth_token = self._load_oauth_token()
         return self._oauth_token
 
+    @Halo(text="Refreshing Copilot token...", spinner="dots")
     def _refresh_copilot_token(self) -> None:
         """Refreshes the Copilot token using the OAuth token."""
         self._session_id = f"{uuid.uuid4()}{int(datetime.now(UTC).timestamp() * 1000)}"
@@ -171,6 +174,7 @@ class GithubCopilotClient:
         if not self._copilot_token:
             raise AuthenticationError("Failed to obtain Copilot token")
 
+    @Halo(text="Thinking...", spinner="dots")
     def chat_completion(self, prompt: str, model: str, system_prompt: str) -> str:
         """
         Sends a chat completion request to the Copilot API.
@@ -218,3 +222,61 @@ class GithubCopilotClient:
 
         except RequestException as e:
             raise APIError(f"Chat completion request failed: {str(e)}") from e
+
+    def stream_chat_completion(self, prompt: str, model: str, system_prompt: str) -> Iterator[str]:
+        """
+        Streams a chat completion response from the Copilot API.
+
+        Args:
+            prompt: The user's input prompt
+            model: The model to use for completion
+            system_prompt: The system prompt to guide the model's behavior
+
+        Yields:
+            Chunks of the model's response as strings
+
+        Raises:
+            APIError: If the API request fails
+        """
+        self._ensure_valid_token()
+
+        headers = {
+            "Content-Type": "application/json",
+            "x-request-id": str(uuid.uuid4()),
+            "vscode-machineid": self._machine_id,
+            "vscode-sessionid": self._session_id,
+            "Authorization": f"Bearer {self._copilot_token.token}",
+            "Copilot-Integration-Id": "vscode-chat",
+            "openai-organization": "github-copilot",
+            "openai-intent": "conversation-panel",
+            **Headers.AUTH,
+        }
+
+        body = {
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ],
+            "model": model,
+            "stream": True,
+        }
+
+        try:
+            with requests.post(APIEndpoints.CHAT, headers=headers, json=body, stream=True) as response:
+                response.raise_for_status()
+
+                for line in response.iter_lines():
+                    if line:
+                        if line.startswith(b"data: "):
+                            json_str = line[6:].decode("utf-8")
+                            if json_str == "[DONE]":
+                                break
+
+                            chunk: StreamChunk = json.loads(json_str)
+                            if chunk["choices"] and "delta" in chunk["choices"][0]:
+                                content = chunk["choices"][0]["delta"].get("content")
+                                if content:
+                                    yield content
+
+        except RequestException as e:
+            raise APIError(f"Streaming chat completion request failed: {str(e)}") from e

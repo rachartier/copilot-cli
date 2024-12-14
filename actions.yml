@@ -90,8 +90,6 @@ actions:
       $logs
       ```
     model: "gpt-4o"
-    output:
-      to_stdout: true
 
   lazygit-conventional-commit-prompt:
     description: "Generate a commit message with Conventional Commit format based on user prompt"
@@ -159,8 +157,6 @@ actions:
 
       ## User Prompt
     model: "gpt-4o"
-    output:
-      to_stdout: true
 
   translate:
     description: "Translate text to a specified language"
@@ -186,10 +182,9 @@ actions:
       ## Example Output Format
       The translated text goes here.
 
-    prompt: ""
+    prompt: "Text to translate: "
+    stream: true
     model: "gpt-4o"
-    output:
-      to_stdout: true
 
   enhance:
     description: "Enhance wording of a given text"
@@ -211,9 +206,8 @@ actions:
       Respect the user's original intent and message.
       Respect the language and tone used in the original text.
     prompt: "Text to enhance:"
+    stream: true
     model: "gpt-4o"
-    output:
-      to_stdout: true
 
   correct:
     description: "Correct spelling and grammar of a given text"
@@ -235,8 +229,7 @@ actions:
       Respect the language and tone used in the original text.
     prompt: "Text to correct:"
     model: "gpt-4o"
-    output:
-      to_stdout: true
+    stream: true
 
   generate-command:
     description: "Generate a command based on user input"
@@ -287,8 +280,7 @@ actions:
 
     prompt: ""
     model: "gpt-4o"
-    output:
-      to_stdout: true
+    stream: true
 
   ask:
     description: "Answer the user question"
@@ -308,5 +300,4 @@ actions:
       Do not include any additional information beyond the answer.
     prompt: "Question: "
     model: "gpt-4o"
-    output:
-      markdown: true
+    stream: true

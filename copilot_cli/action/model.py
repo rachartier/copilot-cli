@@ -1,13 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing_extensions import Callable
 
 from ..args import Args
 
 
 class Output(BaseModel):
-    to_stdout: bool = False
+    to_stdout: bool = Field(default=True)
     to_file: str | None = None
-    markdown: bool | None = None
 
 
 class Action(BaseModel):
@@ -17,4 +16,5 @@ class Action(BaseModel):
     model: str
     commands: dict[str, list[str]] | None = None
     on_complete: Callable[[str, Args], None] | None = None
-    output: Output
+    output: Output = Field(default_factory=Output)
+    stream: bool = False
