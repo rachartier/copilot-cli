@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import TypedDict
 
 import requests
-from halo import Halo
 from pydantic import BaseModel
 from requests.exceptions import RequestException
 
@@ -136,7 +135,6 @@ class GithubCopilotClient:
             self._oauth_token = self._load_oauth_token()
         return self._oauth_token
 
-    @Halo(text="Refreshing Copilot token...", spinner="dots")
     def _refresh_copilot_token(self) -> None:
         """Refreshes the Copilot token using the OAuth token."""
         self._session_id = f"{uuid.uuid4()}{int(datetime.now(UTC).timestamp() * 1000)}"
