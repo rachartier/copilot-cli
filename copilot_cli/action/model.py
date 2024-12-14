@@ -9,6 +9,11 @@ class Output(BaseModel):
     to_file: str | None = None
 
 
+class Options(BaseModel):
+    stream: bool = Field(default=True)
+    spinner: bool = Field(default=True)
+
+
 class Action(BaseModel):
     description: str
     prompt: str
@@ -17,4 +22,4 @@ class Action(BaseModel):
     commands: dict[str, list[str]] | None = None
     on_complete: Callable[[str, Args], None] | None = None
     output: Output = Field(default_factory=Output)
-    stream: bool = False
+    options: Options = Field(default_factory=Options)

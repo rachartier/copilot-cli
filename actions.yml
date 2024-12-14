@@ -26,6 +26,9 @@ actions:
     output:
       to_stdout: false
       to_file: "$path/.gitignore"
+    options:
+      stream: false
+      spinner: false
 
   lazygit-conventional-commit:
     description: "Generate a commit message with Conventional Commit format"
@@ -53,12 +56,14 @@ actions:
       5: ci: configure automatic deployment to staging
       Additional constraints:
 
-      Messages must be relevant and realistic
+      Messages must be relevant and realistic, made by a developer
       Avoid vague or generic descriptions
       Don't reuse the examples shown above
       Keep it simple and straightforward
       Focus on common development tasks
       Stop when you start repeating similar concepts
+      Do not say where the changes are made, only what the changes are, only if it's relevant.
+      Do output only the commit messages, no additional text.
 
       Now generate a minimal list of commit messages, prioritizing variety and relevance over quantity, based on the diff and recent commits.
     commands:
@@ -90,6 +95,9 @@ actions:
       $logs
       ```
     model: "gpt-4o"
+    options:
+      stream: false
+      spinner: false
 
   lazygit-conventional-commit-prompt:
     description: "Generate a commit message with Conventional Commit format based on user prompt"
@@ -157,6 +165,9 @@ actions:
 
       ## User Prompt
     model: "gpt-4o"
+    options:
+      stream: false
+      spinner: false
 
   translate:
     description: "Translate text to a specified language"

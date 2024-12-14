@@ -174,7 +174,6 @@ class GithubCopilotClient:
         if not self._copilot_token:
             raise AuthenticationError("Failed to obtain Copilot token")
 
-    @Halo(text="Thinking...", spinner="dots")
     def chat_completion(self, prompt: str, model: str, system_prompt: str) -> str:
         """
         Sends a chat completion request to the Copilot API.

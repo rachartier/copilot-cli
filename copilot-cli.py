@@ -2,6 +2,8 @@ import argparse
 import os
 import subprocess
 
+from halo import Halo
+
 from copilot_cli.action.action_manager import ActionManager
 from copilot_cli.action.model import Action
 from copilot_cli.args import Args
@@ -79,9 +81,14 @@ def create_parser() -> argparse.ArgumentParser:
         choices=action_manager.get_actions_list(),
     )
     _ = parser.add_argument(
-        "--nostream",
+        "--no-stream",
         action="store_true",
         help="Disable streaming",
+    )
+    _ = parser.add_argument(
+        "--no-spinner",
+        action="store_false",
+        help="Disable spinner",
     )
     return parser
 
@@ -135,13 +142,15 @@ def handle_completion(
     args: Args,
     stream_options: StreamOptions | None = None,
 ) -> None:
-    if not args.nostream and action_obj and action_obj.stream:
+    if not args.no_stream and action_obj and action_obj.options.stream:
         streamer = create_streamer(stream_options)
         streamer.stream(client.stream_chat_completion(prompt=prompt, model=model, system_prompt=system_prompt))
 
         response = streamer.get_content()
     else:
-        response = client.chat_completion(prompt=prompt, model=model, system_prompt=system_prompt)
+        enable_spinner = not args.no_spinner or action_obj.options.spinner
+        with Halo(text="Generating response", spinner="dots", enabled=enable_spinner):
+            response = client.chat_completion(prompt=prompt, model=model, system_prompt=system_prompt)
 
     if action_obj:
         if action_obj.output.to_file:
@@ -151,7 +160,7 @@ def handle_completion(
             with open(file, "w") as f:
                 _ = f.write(response)
                 CopilotCLILogger.log_success(f"Output written to {file}")
-        if args.nostream or not action_obj.stream:
+        if args.no_stream or not action_obj.options.stream:
             print(response)
     else:
         print(response)

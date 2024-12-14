@@ -8,5 +8,6 @@ class Args:
     model: str
     system_prompt: str
     action: str | None
-    nostream: bool
+    no_stream: bool
+    no_spinner: bool
     list: bool
