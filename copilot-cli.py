@@ -2,9 +2,6 @@ import argparse
 import os
 import subprocess
 
-from rich.console import Console
-from rich.markdown import Markdown
-
 from copilot_cli.action.action_manager import ActionManager
 from copilot_cli.action.model import Action
 from copilot_cli.args import Args
@@ -155,7 +152,7 @@ def handle_completion(
                 _ = f.write(response)
                 CopilotCLILogger.log_success(f"Output written to {file}")
         if args.nostream or not action_obj.stream:
-            Console().print(Markdown(response))
+            print(response)
     else:
         print(response)
 
