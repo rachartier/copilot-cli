@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 
+import pyperclip
 from halo import Halo
 
 from copilot_cli.action.action_manager import ActionManager
@@ -90,6 +91,11 @@ def create_parser() -> argparse.ArgumentParser:
         action="store_false",
         help="Disable spinner",
     )
+    _ = parser.add_argument(
+        "--copy-to-clipboard",
+        action="store_true",
+        help="Copy the response to the clipboard",
+    )
     return parser
 
 
@@ -141,7 +147,7 @@ def handle_completion(
     action_obj: Action | None,
     args: Args,
     stream_options: StreamOptions | None = None,
-) -> None:
+) -> str:
     if not args.no_stream and action_obj and action_obj.options.stream:
         streamer = create_streamer(stream_options)
         streamer.stream(client.stream_chat_completion(prompt=prompt, model=model, system_prompt=system_prompt))
@@ -164,6 +170,8 @@ def handle_completion(
             print(response)
     else:
         print(response)
+
+    return response
 
 
 def main() -> None:
@@ -206,7 +214,7 @@ def main() -> None:
         system_prompt = args.system_prompt
         model = args.model
 
-    handle_completion(
+    response = handle_completion(
         client,
         current_prompt,
         model,
@@ -214,6 +222,9 @@ def main() -> None:
         action_obj,
         args,
     )
+
+    if args.copy_to_clipboard:
+        pyperclip.copy(response)
 
 
 if __name__ == "__main__":

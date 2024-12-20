@@ -10,4 +10,5 @@ class Args:
     action: str | None
     no_stream: bool
     no_spinner: bool
+    copy_to_clipboard: bool
     list: bool
