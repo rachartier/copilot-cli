@@ -41,7 +41,7 @@ actions:
       Description should be short and precise (max 50 characters)
       Each message must be unique and bring value
       Number each message (format "1:", "2:", etc.)
-      Generate between 4 and 10 messages, focusing on quality over quantity
+      Generate a max of 10 messages, focusing on quality over quantity
       Only add a new message if it's substantially different from others
       Scope is optional
       Start description with an imperative verb
@@ -81,8 +81,8 @@ actions:
         - "$path"
         - "log"
         - "-n"
-        - "10"
-        - "--pretty=format:'%h %s'"
+        - "50"
+        - "--pretty=format:'%s'"
     prompt: |
       ## Diff input
       ```diff
@@ -94,7 +94,7 @@ actions:
       ```
       $logs
       ```
-    model: "o3-mini"
+    model: "gemini-2.0-flash-001"
     options:
       stream: false
       spinner: false
@@ -149,7 +149,7 @@ actions:
         - "$path"
         - "log"
         - "-n"
-        - "10"
+        - "50"
         - "--pretty=format:'%h %s'"
     prompt: |
       ## Diff input
@@ -164,7 +164,7 @@ actions:
       ```
 
       ## User Prompt
-    model: "o3-mini"
+    model: "gemini-2.0-flash-001"
     options:
       stream: false
       spinner: false
