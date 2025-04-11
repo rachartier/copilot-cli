@@ -44,9 +44,6 @@ class CopilotToken(BaseModel):
     Represents a GitHub Copilot authentication token and its associated metadata.
     """
 
-    class Config:
-        extra = "allow"
-
     token: str
     expires_at: int
     refresh_in: int
@@ -61,7 +58,6 @@ class CopilotToken(BaseModel):
     codesearch: bool
     copilotignore_enabled: bool
     individual: bool
-    nes_enabled: bool
     prompt_8k: bool
     snippy_load_test_enabled: bool
     xcode: bool
@@ -122,9 +118,13 @@ class GithubCopilotClient:
             if host_data and host_data.github_oauth_token:
                 return host_data.github_oauth_token
         except (FileNotFoundError, json.JSONDecodeError, KeyError):
-            raise AuthenticationError("GitHub Copilot configuration not found or invalid.")
+            raise AuthenticationError(
+                "GitHub Copilot configuration not found or invalid."
+            )
 
-        raise AuthenticationError("OAuth token not found in GitHub Copilot configuration.")
+        raise AuthenticationError(
+            "OAuth token not found in GitHub Copilot configuration."
+        )
 
     def _get_oauth_token(self) -> str:
         """
@@ -220,7 +220,9 @@ class GithubCopilotClient:
         except RequestException as e:
             raise APIError(f"Chat completion request failed: {str(e)}") from e
 
-    def stream_chat_completion(self, prompt: str, model: str, system_prompt: str) -> Iterator[str]:
+    def stream_chat_completion(
+        self, prompt: str, model: str, system_prompt: str
+    ) -> Iterator[str]:
         """
         Streams a chat completion response from the Copilot API.
 
@@ -259,7 +261,9 @@ class GithubCopilotClient:
         }
 
         try:
-            with requests.post(APIEndpoints.CHAT, headers=headers, json=body, stream=True) as response:
+            with requests.post(
+                APIEndpoints.CHAT, headers=headers, json=body, stream=True
+            ) as response:
                 response.raise_for_status()
 
                 for line in response.iter_lines():
