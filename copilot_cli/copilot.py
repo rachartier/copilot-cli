@@ -111,20 +111,22 @@ class GithubCopilotClient:
     def _load_oauth_token(self) -> str:
         """Loads the OAuth token from the GitHub Copilot configuration."""
         config_dir = os.getenv("XDG_CONFIG_HOME", Path.home() / ".config")
-        hosts_file = Path(config_dir) / "github-copilot" / "hosts.json"
 
-        try:
-            host_data = HostsData.from_file(hosts_file)
-            if host_data and host_data.github_oauth_token:
-                return host_data.github_oauth_token
-        except (FileNotFoundError, json.JSONDecodeError, KeyError):
-            raise AuthenticationError(
-                "GitHub Copilot configuration not found or invalid."
-            )
+        files = [
+            Path(config_dir) / "github-copilot" / "hosts.json",
+            Path(config_dir) / "github-copilot" / "apps.json",
+        ]
 
-        raise AuthenticationError(
-            "OAuth token not found in GitHub Copilot configuration."
-        )
+        for file in files:
+            if file.exists():
+                try:
+                    host_data = HostsData.from_file(file)
+                    if host_data and host_data.github_oauth_token:
+                        return host_data.github_oauth_token
+                except (FileNotFoundError, json.JSONDecodeError, KeyError):
+                    raise AuthenticationError("GitHub Copilot configuration not found or invalid.")
+
+        raise AuthenticationError("OAuth token not found in GitHub Copilot configuration.")
 
     def _get_oauth_token(self) -> str:
         """
@@ -220,9 +222,7 @@ class GithubCopilotClient:
         except RequestException as e:
             raise APIError(f"Chat completion request failed: {str(e)}") from e
 
-    def stream_chat_completion(
-        self, prompt: str, model: str, system_prompt: str
-    ) -> Iterator[str]:
+    def stream_chat_completion(self, prompt: str, model: str, system_prompt: str) -> Iterator[str]:
         """
         Streams a chat completion response from the Copilot API.
 
@@ -261,9 +261,7 @@ class GithubCopilotClient:
         }
 
         try:
-            with requests.post(
-                APIEndpoints.CHAT, headers=headers, json=body, stream=True
-            ) as response:
+            with requests.post(APIEndpoints.CHAT, headers=headers, json=body, stream=True) as response:
                 response.raise_for_status()
 
                 for line in response.iter_lines():
