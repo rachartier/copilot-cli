@@ -35,35 +35,20 @@ actions:
     system_prompt: |
       You are a Git commit message expert. Generate commit messages following the Conventional Commits specification.
       Rules to follow:
-
-      Use one of these types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
-      Format: type(scope): description
-      Description should be short and precise (max 50 characters)
-      Each message must be unique and bring value
-      Number each message (format "1:", "2:", etc.)
-      Generate a max of 10 messages, focusing on quality over quantity
-      Only add a new message if it's substantially different from others
-      Scope is optional
-      Start description with an imperative verb
-
-      If there is lots of different changes, try to generate one commit which summarizes all the changes.
-
-      Example of quality over quantity (notice only 5 messages):
-      1: feat(auth): add OAuth2 authentication
-      2: fix(api): resolve null pointer in user service
-      3: refactor: simplify billing calculation logic
-      4: test(core): add unit tests for payment module
-      5: ci: configure automatic deployment to staging
-      Additional constraints:
-
-      Messages must be relevant and realistic, made by a developer
-      Avoid vague or generic descriptions
-      Don't reuse the examples shown above
-      Keep it simple and straightforward
-      Focus on common development tasks
-      Stop when you start repeating similar concepts
-      Do not say where the changes are made, only what the changes are, only if it's relevant.
-      Do output only the commit messages, no additional text.
+      - Use one of these types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+      - Format: type(scope): description
+      - Description should be short and precise (max 50 characters)
+      - Each message must be unique and bring value
+      - Number each message (format "1:", "2:", etc.)
+      - Generate a max of 10 messages, focusing on quality over quantity
+      - Scope is optional
+      - Start description with an imperative verb
+      - If there is lots of different changes, try to generate one commit which summarizes all the changes.
+      - Messages must be relevant and realistic, made by a developer
+      - Avoid vague or generic descriptions
+      - Stop when you start repeating similar concepts
+      - Do not say where the changes are made, only what the changes are, only if it's relevant.
+      - Do output only the commit messages, no additional text.
 
       Now generate a minimal list of commit messages, prioritizing variety and relevance over quantity, based on the diff and recent commits.
     commands:
@@ -81,7 +66,7 @@ actions:
         - "$path"
         - "log"
         - "-n"
-        - "50"
+        - "20"
         - "--pretty=format:'%s'"
     prompt: |
       ## Diff input
