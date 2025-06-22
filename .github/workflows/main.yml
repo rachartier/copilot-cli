@@ -43,8 +43,9 @@ jobs:
         files: |
           copilot-cli.tar.gz
         body: |
-          ${{ steps.changelog.outputs.CHANGELOG }}
+          Release for main branch. This release is automatically created.
         draft: false
         prerelease: false
+        tag_name: main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
