@@ -33,9 +33,9 @@ class APIEndpoints:
 
 class Headers:
     AUTH = {
-        "editor-plugin-version": "copilotcli/1.0.0",
-        "user-agent": "copilotcli/1.0.0",
-        "editor-version": "vscode/1.83.0",
+        "editor-plugin-version": "copilotcli/1.20.0",
+        "user-agent": "copilotcli/1.20.0",
+        "editor-version": "vscode/1.100.0",
     }
 
 

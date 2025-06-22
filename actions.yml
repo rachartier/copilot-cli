@@ -22,7 +22,7 @@ actions:
 
       Use the user prompt to gather any additional context or requirements for the gitignore file.
     prompt: ""
-    model: "o3-mini"
+    model: "gpt-4.1"
     output:
       to_stdout: false
       to_file: "$path/.gitignore"
@@ -94,7 +94,7 @@ actions:
       ```
       $logs
       ```
-    model: "gemini-2.0-flash-001"
+    model: "gpt-4.1"
     options:
       stream: false
       spinner: false
@@ -195,7 +195,7 @@ actions:
 
     prompt: "Text to translate: "
     stream: true
-    model: "o3-mini"
+    model: "gpt-4.1"
 
   enhance:
     description: "Enhance wording of a given text"
@@ -218,7 +218,7 @@ actions:
       Respect the language and tone used in the original text.
     prompt: "Text to enhance:"
     stream: true
-    model: "o3-mini"
+    model: "gpt-4.1"
 
   correct:
     description: "Correct spelling and grammar of a given text"
@@ -239,7 +239,7 @@ actions:
       Respect the user's original intent and message.
       Respect the language and tone used in the original text.
     prompt: "Text to correct:"
-    model: "o3-mini"
+    model: "gpt-4.1"
     stream: true
 
   generate-command:
@@ -310,5 +310,5 @@ actions:
       Provide a clear and accurate answer to the question.
       Do not include any additional information beyond the answer.
     prompt: "Question: "
-    model: "o3-mini"
+    model: "gpt-4.1"
     stream: true
