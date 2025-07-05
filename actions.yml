@@ -275,7 +275,7 @@ actions:
       Give me a POSIX command to fulfill this request:
 
     prompt: ""
-    model: "o3-mini"
+    model: "gpt-4.1"
     stream: true
 
   ask:
