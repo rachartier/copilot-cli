@@ -22,7 +22,7 @@ actions:
 
       Use the user prompt to gather any additional context or requirements for the gitignore file.
     prompt: ""
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
     output:
       to_stdout: false
       to_file: "$path/.gitignore"
@@ -79,7 +79,7 @@ actions:
       ```
       $logs
       ```
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
     options:
       stream: false
       spinner: false
@@ -149,7 +149,7 @@ actions:
       ```
 
       ## User Prompt
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
     options:
       stream: false
       spinner: false
@@ -180,7 +180,7 @@ actions:
 
     prompt: "Text to translate: "
     stream: true
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
 
   enhance:
     description: "Enhance wording of a given text"
@@ -203,7 +203,7 @@ actions:
       Respect the language and tone used in the original text.
     prompt: "Text to enhance:"
     stream: true
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
 
   correct:
     description: "Correct spelling and grammar of a given text"
@@ -224,7 +224,7 @@ actions:
       Respect the user's original intent and message.
       Respect the language and tone used in the original text.
     prompt: "Text to correct:"
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
     stream: true
 
   generate-command:
@@ -275,7 +275,7 @@ actions:
       Give me a POSIX command to fulfill this request:
 
     prompt: ""
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
     stream: true
 
   ask:
@@ -295,5 +295,5 @@ actions:
       Provide a clear and accurate answer to the question.
       Do not include any additional information beyond the answer.
     prompt: "Question: "
-    model: "gpt-4.1"
+    model: "claude-haiku-4.5"
     stream: true
