@@ -55,7 +55,6 @@ actions:
 
       ## Output Format
 
-      - Number each message: `1:`, `2:`, etc.
       - Output ONLY the commit messages
       - NO explanations, markdown, or additional text
       - One message per line
