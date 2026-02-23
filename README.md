@@ -14,7 +14,7 @@ Copilot CLI is a command-line interface for interacting with GitHub Copilot's ch
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/copilot-cli.git
+    git clone https://github.com/rachartier/copilot-cli.git
     cd copilot-cli
     ```
 
