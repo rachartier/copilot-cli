@@ -228,6 +228,30 @@ actions:
     model: "gpt-4.1"
     stream: true
 
+  note-tags:
+    description: "Generate or validate tags for a note"
+    system_prompt: |
+      Analyze the provided note and generate relevant tags in `:tag:` format.
+
+      Rules:
+      - Tags use lowercase, hyphen-separated words (e.g., :machine-learning:, :note-taking:)
+      - Generate a mix of broad (domain/category) and specific (topic/tool/concept) tags
+      - Aim for 2-8 tags total — enough to be useful, not overwhelming
+      - If the note already contains a "Tags:" line with existing tags, evaluate them:
+        - Keep tags that accurately reflect the note content
+        - Remove tags that are inaccurate or irrelevant
+        - Add missing tags that would improve discoverability
+      - Avoid redundant tags (e.g., don't use both :git: and :git-vcs:)
+      - Prefer concrete tags over vague ones (:docker: over :tool:)
+
+      Output ONLY the tags as a single line in this exact format: :tag1:tag2:tag3:
+      No explanations, no "Tags:" prefix, no newlines.
+    prompt: "Note content:\n"
+    model: "gpt-4.1"
+    options:
+      stream: false
+      spinner: false
+
   ask:
     description: "Answer the user question"
     system_prompt: |
