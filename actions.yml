@@ -20,13 +20,14 @@ actions:
 
       Output ONLY the .gitignore content, no code blocks or explanations.
     prompt: ""
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     output:
       to_stdout: false
       to_file: "$path/.gitignore"
     options:
       stream: false
       spinner: false
+      reasoning_effort: "low"
 
   lazygit-conventional-commit:
     description: "Generate a commit message with Conventional Commit format"
@@ -75,10 +76,11 @@ actions:
       ```
       $logs
       ```
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     options:
       stream: false
       spinner: false
+      reasoning_effort: "low"
 
   lazygit-conventional-commit-prompt:
     description: "Generate a commit message with Conventional Commit format based on user prompt"
@@ -128,10 +130,11 @@ actions:
       ```
 
       ## User Prompt
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     options:
       stream: false
       spinner: false
+      reasoning_effort: "low"
 
   translate:
     description: "Translate text to a specified language"
@@ -149,7 +152,9 @@ actions:
       Output ONLY the translated text, no explanations or metadata.
     prompt: "Text to translate: "
     stream: true
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
+    options:
+      reasoning_effort: "low"
 
   enhance:
     description: "Enhance wording of a given text"
@@ -173,7 +178,9 @@ actions:
       Output ONLY the enhanced text, no explanations.
     prompt: "Text to enhance:"
     stream: true
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
+    options:
+      reasoning_effort: "low"
 
   correct:
     description: "Correct spelling and grammar of a given text"
@@ -198,8 +205,10 @@ actions:
 
       Output ONLY the corrected text, no explanations.
     prompt: "Text to correct:"
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     stream: true
+    options:
+      reasoning_effort: "low"
 
   generate-command:
     description: "Generate a command based on user input"
@@ -225,8 +234,10 @@ actions:
 
       If request is ambiguous, provide most likely interpretation and note assumptions.
     prompt: ""
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     stream: true
+    options:
+      reasoning_effort: "low"
 
   note-tags:
     description: "Generate or validate tags for a note"
@@ -248,10 +259,11 @@ actions:
 
       Output ONLY the tags as a single line in this exact format: :tag1:tag2:tag3: No explanations, no Tags: prefix, no newlines.
     prompt: "Note content:\n"
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     options:
       stream: false
       spinner: false
+      reasoning_effort: "low"
 
   ask:
     description: "Answer the user question"
@@ -274,5 +286,5 @@ actions:
 
       Output your answer in plain markdown.
     prompt: "Question: "
-    model: "gpt-4.1"
+    model: "gpt-5-mini"
     stream: true

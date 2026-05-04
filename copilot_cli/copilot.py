@@ -174,21 +174,7 @@ class GithubCopilotClient:
         if not self._copilot_token:
             raise AuthenticationError("Failed to obtain Copilot token")
 
-    def chat_completion(self, prompt: str, model: str, system_prompt: str) -> str:
-        """
-        Sends a chat completion request to the Copilot API.
-
-        Args:
-            prompt: The user's input prompt
-            model: The model to use for completion
-            system_prompt: The system prompt to guide the model's behavior
-
-        Returns:
-            The model's response as a string
-
-        Raises:
-            APIError: If the API request fails
-        """
+    def chat_completion(self, prompt: str, model: str, system_prompt: str, reasoning_effort: str | None = None) -> str:
         self._ensure_valid_token()
 
         headers = {
@@ -212,6 +198,9 @@ class GithubCopilotClient:
             "stream": False,
         }
 
+        if reasoning_effort is not None:
+            body["reasoning_effort"] = reasoning_effort
+
         try:
             response = requests.post(APIEndpoints.CHAT, headers=headers, json=body)
             response.raise_for_status()
@@ -222,21 +211,7 @@ class GithubCopilotClient:
         except RequestException as e:
             raise APIError(f"Chat completion request failed: {str(e)}") from e
 
-    def stream_chat_completion(self, prompt: str, model: str, system_prompt: str) -> Iterator[str]:
-        """
-        Streams a chat completion response from the Copilot API.
-
-        Args:
-            prompt: The user's input prompt
-            model: The model to use for completion
-            system_prompt: The system prompt to guide the model's behavior
-
-        Yields:
-            Chunks of the model's response as strings
-
-        Raises:
-            APIError: If the API request fails
-        """
+    def stream_chat_completion(self, prompt: str, model: str, system_prompt: str, reasoning_effort: str | None = None) -> Iterator[str]:
         self._ensure_valid_token()
 
         headers = {
@@ -259,6 +234,9 @@ class GithubCopilotClient:
             "model": model,
             "stream": True,
         }
+
+        if reasoning_effort is not None:
+            body["reasoning_effort"] = reasoning_effort
 
         try:
             with requests.post(APIEndpoints.CHAT, headers=headers, json=body, stream=True) as response:

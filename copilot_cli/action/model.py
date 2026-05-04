@@ -12,6 +12,7 @@ class Output(BaseModel):
 class Options(BaseModel):
     stream: bool = Field(default=True)
     spinner: bool = Field(default=True)
+    reasoning_effort: str | None = None
 
 
 class Action(BaseModel):

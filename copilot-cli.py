@@ -148,15 +148,17 @@ def handle_completion(
     args: Args,
     stream_options: StreamOptions | None = None,
 ) -> str:
+    reasoning_effort = action_obj.options.reasoning_effort if action_obj else None
+
     if not args.no_stream and action_obj and action_obj.options.stream:
         streamer = create_streamer(stream_options)
-        streamer.stream(client.stream_chat_completion(prompt=prompt, model=model, system_prompt=system_prompt))
+        streamer.stream(client.stream_chat_completion(prompt=prompt, model=model, system_prompt=system_prompt, reasoning_effort=reasoning_effort))
 
         response = streamer.get_content()
     else:
         enable_spinner = not args.no_spinner or action_obj.options.spinner
         with Halo(text="Generating response", spinner="dots", enabled=enable_spinner):
-            response = client.chat_completion(prompt=prompt, model=model, system_prompt=system_prompt)
+            response = client.chat_completion(prompt=prompt, model=model, system_prompt=system_prompt, reasoning_effort=reasoning_effort)
 
     if action_obj:
         if action_obj.output.to_file:
