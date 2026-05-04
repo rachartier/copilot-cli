@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import sys
 
 import pyperclip
 from halo import Halo
@@ -105,7 +106,7 @@ def process_action_commands(
     path: str,
 ) -> str:
     final_prompt = base_prompt
-    commands: dict[str, list[str]] | None = getattr(action_obj, "commands", None)
+    commands: dict[str, list[str]] | None = action_obj.commands
 
     if not commands:
         return final_prompt
@@ -156,7 +157,7 @@ def handle_completion(
 
         response = streamer.get_content()
     else:
-        enable_spinner = not args.no_spinner or action_obj.options.spinner
+        enable_spinner = not args.no_spinner or (action_obj is not None and action_obj.options.spinner)
         with Halo(text="Generating response", spinner="dots", enabled=enable_spinner):
             response = client.chat_completion(prompt=prompt, model=model, system_prompt=system_prompt, reasoning_effort=reasoning_effort)
 

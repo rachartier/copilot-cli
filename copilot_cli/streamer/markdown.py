@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from typing import Any, TypeAlias
 
-from rich.console import Console, ConsoleOptions
+from rich.console import Console
 from rich.live import Live
 from rich.markdown import Markdown
 from rich.text import Text
@@ -28,15 +28,6 @@ class MarkdownStreamer:
         """
         self.console = Console(color_system=color_system, markup=markup, highlight=highlight)
         self.content = ""
-
-    def get_console_options(self) -> ConsoleOptions:
-        """
-        Get the current console options.
-
-        Returns:
-            The current console options configuration
-        """
-        return self.console.options
 
     def set_console_options(self, **options: Any) -> None:
         """
@@ -76,15 +67,5 @@ class MarkdownStreamer:
                     # If markdown parsing fails (incomplete markdown), show as plain text
                     live.update(Text(self.content))
 
-    def clear_content(self) -> None:
-        """Clear the current content buffer."""
-        self.content = ""
-
     def get_content(self) -> str:
-        """
-        Get the current content.
-
-        Returns:
-            The accumulated content as a string
-        """
         return self.content

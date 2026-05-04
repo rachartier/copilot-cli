@@ -174,10 +174,8 @@ class GithubCopilotClient:
         if not self._copilot_token:
             raise AuthenticationError("Failed to obtain Copilot token")
 
-    def chat_completion(self, prompt: str, model: str, system_prompt: str, reasoning_effort: str | None = None) -> str:
-        self._ensure_valid_token()
-
-        headers = {
+    def _build_headers(self) -> dict:
+        return {
             "Content-Type": "application/json",
             "x-request-id": str(uuid.uuid4()),
             "vscode-machineid": self._machine_id,
@@ -189,71 +187,52 @@ class GithubCopilotClient:
             **Headers.AUTH,
         }
 
-        body = {
+    def _build_body(self, prompt: str, model: str, system_prompt: str, stream: bool, reasoning_effort: str | None) -> dict:
+        body: dict = {
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt},
             ],
             "model": model,
-            "stream": False,
+            "stream": stream,
         }
-
         if reasoning_effort is not None:
             body["reasoning_effort"] = reasoning_effort
+        return body
 
+    def chat_completion(self, prompt: str, model: str, system_prompt: str, reasoning_effort: str | None = None) -> str:
+        self._ensure_valid_token()
         try:
-            response = requests.post(APIEndpoints.CHAT, headers=headers, json=body)
+            response = requests.post(
+                APIEndpoints.CHAT,
+                headers=self._build_headers(),
+                json=self._build_body(prompt, model, system_prompt, False, reasoning_effort),
+            )
             response.raise_for_status()
-
             chat_response: ChatResponse = response.json()
             return chat_response["choices"][0]["message"]["content"]
-
         except RequestException as e:
             raise APIError(f"Chat completion request failed: {str(e)}") from e
 
     def stream_chat_completion(self, prompt: str, model: str, system_prompt: str, reasoning_effort: str | None = None) -> Iterator[str]:
         self._ensure_valid_token()
-
-        headers = {
-            "Content-Type": "application/json",
-            "x-request-id": str(uuid.uuid4()),
-            "vscode-machineid": self._machine_id,
-            "vscode-sessionid": self._session_id,
-            "Authorization": f"Bearer {self._copilot_token.token}",
-            "Copilot-Integration-Id": "vscode-chat",
-            "openai-organization": "github-copilot",
-            "openai-intent": "conversation-panel",
-            **Headers.AUTH,
-        }
-
-        body = {
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt},
-            ],
-            "model": model,
-            "stream": True,
-        }
-
-        if reasoning_effort is not None:
-            body["reasoning_effort"] = reasoning_effort
-
         try:
-            with requests.post(APIEndpoints.CHAT, headers=headers, json=body, stream=True) as response:
+            with requests.post(
+                APIEndpoints.CHAT,
+                headers=self._build_headers(),
+                json=self._build_body(prompt, model, system_prompt, True, reasoning_effort),
+                stream=True,
+            ) as response:
                 response.raise_for_status()
-
                 for line in response.iter_lines():
-                    if line:
-                        if line.startswith(b"data: "):
-                            json_str = line[6:].decode("utf-8")
-                            if json_str == "[DONE]":
-                                break
-
-                            chunk: StreamChunk = json.loads(json_str)
-                            if chunk["choices"] and "delta" in chunk["choices"][0]:
-                                content = chunk["choices"][0]["delta"].get("content")
-                                if content:
-                                    yield content
-
+                    if line and line.startswith(b"data: "):
+                        json_str = line[6:].decode("utf-8")
+                        if json_str == "[DONE]":
+                            break
+                        chunk: StreamChunk = json.loads(json_str)
+                        if chunk["choices"] and "delta" in chunk["choices"][0]:
+                            content = chunk["choices"][0]["delta"].get("content")
+                            if content:
+                                yield content
         except RequestException as e:
             raise APIError(f"Streaming chat completion request failed: {str(e)}") from e
