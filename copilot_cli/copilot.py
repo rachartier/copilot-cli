@@ -58,7 +58,7 @@ class CopilotToken(BaseModel):
     codesearch: bool
     copilotignore_enabled: bool
     individual: bool
-    prompt_8k: bool
+    prompt_8k: bool = False
     snippy_load_test_enabled: bool
     xcode: bool
     xcode_chat: bool
