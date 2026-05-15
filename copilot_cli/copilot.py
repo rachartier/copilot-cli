@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TypedDict
 
 import requests
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, ValidationError
 from requests.exceptions import RequestException
 
 from .exception.api_error import APIError
@@ -40,34 +40,30 @@ class Headers:
 
 
 class CopilotToken(BaseModel):
-    """
-    Represents a GitHub Copilot authentication token and its associated metadata.
-    """
+    model_config = ConfigDict(extra="ignore")
 
     token: str
     expires_at: int
     refresh_in: int
     endpoints: dict[str, str]
-    tracking_id: str
-    sku: str
 
-    annotations_enabled: bool
-    chat_enabled: bool
-    chat_jetbrains_enabled: bool
-    code_quote_enabled: bool
-    codesearch: bool
-    copilotignore_enabled: bool
-    individual: bool
+    tracking_id: str = ""
+    sku: str = ""
+    annotations_enabled: bool = False
+    chat_enabled: bool = False
+    chat_jetbrains_enabled: bool = False
+    code_quote_enabled: bool = False
+    codesearch: bool = False
+    copilotignore_enabled: bool = False
+    individual: bool = False
     prompt_8k: bool = False
-    snippy_load_test_enabled: bool
-    xcode: bool
-    xcode_chat: bool
-
-    public_suggestions: str
-    telemetry: str
-    enterprise_list: list[int]
-
-    code_review_enabled: bool
+    snippy_load_test_enabled: bool = False
+    xcode: bool = False
+    xcode_chat: bool = False
+    public_suggestions: str = ""
+    telemetry: str = ""
+    enterprise_list: list[int] = []
+    code_review_enabled: bool = False
 
 
 class ChatMessage(TypedDict):
@@ -105,7 +101,7 @@ class GithubCopilotClient:
             try:
                 token_data = json.loads(cache_path.read_text())
                 self._copilot_token = CopilotToken(**token_data)
-            except (json.JSONDecodeError, TypeError):
+            except (json.JSONDecodeError, TypeError, ValidationError):
                 cache_path.unlink(missing_ok=True)
 
     def _load_oauth_token(self) -> str:
@@ -158,6 +154,8 @@ class GithubCopilotClient:
             cache_path = Path("/tmp/copilot_token.json")
             _ = cache_path.write_text(json.dumps(token_data))
 
+        except ValidationError as e:
+            raise APIError(f"Copilot token response schema changed: {e}") from e
         except RequestException as e:
             raise APIError(f"Failed to refresh Copilot token: {str(e)}") from e
 
