@@ -10,6 +10,7 @@ import requests
 from pydantic import BaseModel, ConfigDict, ValidationError
 from requests.exceptions import RequestException
 
+from .client import iter_sse_content
 from .exception.api_error import APIError
 from .exception.authentication_error import AuthenticationError
 
@@ -222,15 +223,6 @@ class GithubCopilotClient:
                 stream=True,
             ) as response:
                 response.raise_for_status()
-                for line in response.iter_lines():
-                    if line and line.startswith(b"data: "):
-                        json_str = line[6:].decode("utf-8")
-                        if json_str == "[DONE]":
-                            break
-                        chunk: StreamChunk = json.loads(json_str)
-                        if chunk["choices"] and "delta" in chunk["choices"][0]:
-                            content = chunk["choices"][0]["delta"].get("content")
-                            if content:
-                                yield content
+                yield from iter_sse_content(response)
         except RequestException as e:
             raise APIError(f"Streaming chat completion request failed: {str(e)}") from e

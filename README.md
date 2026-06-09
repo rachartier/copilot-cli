@@ -30,16 +30,18 @@ Copilot CLI is a command-line interface for interacting with GitHub Copilot's ch
 To use the Copilot CLI, run the `copilot-cli.py` script with the desired arguments:
 
 ```sh
-python copilot-cli.py --prompt "Your prompt here" --model "gpt-4o"
+python copilot-cli.py --prompt "Your prompt here" --model "gpt-5-mini"
 ```
 
 ### Arguments
 
 - `--path`: Path to run the action in (default: `.`).
 - `--prompt`: Prompt to send to Copilot Chat.
-- `--model`: Model to use for the chat (default: `gpt-4`).
+- `--model`: Model to use for the chat (default: `gpt-5-mini` in copilot mode, `qwen3.5:4b` in ollama mode).
 - `--system_prompt`: System prompt to send to Copilot Chat.
 - `--action`: Action to perform (choices are defined in `ActionManager`).
+- `--mode`: Backend to use, `copilot` (default) or `ollama`.
+- `--ollama-host`: Ollama server host in `ollama` mode (default: `http://localhost:11434`, overridable via the `OLLAMA_HOST` env var).
 
 ### Example
 
@@ -50,6 +52,16 @@ python copilot-cli.py --prompt "Explain the concept of recursion"
 #### Actions
 ```sh
 python copilot-cli.py --action "gitignore" --prompt "Write a gitignore for Python" --path "/path/to/project"
+```
+
+#### Ollama mode
+
+Run against a local [Ollama](https://ollama.com/) server instead of GitHub Copilot. The `--model`
+must name a model you have already pulled locally; action-defined Copilot models are ignored in this
+mode.
+
+```sh
+python copilot-cli.py --mode ollama --model llama3.1 --prompt "Explain the concept of recursion"
 ```
 
 ## Extras
@@ -94,5 +106,4 @@ It will enable generations of commits messages for staged changed when you press
 ## Acknowledgements
 
 - [GitHub Copilot](https://github.com/features/copilot)
-- [OpenAI GPT-4](https://openai.com/research/gpt-4)
 

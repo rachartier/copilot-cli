@@ -9,8 +9,13 @@ from halo import Halo
 from copilot_cli.action.action_manager import ActionManager
 from copilot_cli.action.model import Action
 from copilot_cli.args import Args
-from copilot_cli.constants import DEFAULT_SYSTEM_PROMPT
-from copilot_cli.copilot import GithubCopilotClient
+from copilot_cli.client import LLMClient, create_client
+from copilot_cli.constants import (
+    DEFAULT_COPILOT_MODEL,
+    DEFAULT_OLLAMA_HOST,
+    DEFAULT_OLLAMA_MODEL,
+    DEFAULT_SYSTEM_PROMPT,
+)
 from copilot_cli.log import CopilotCLILogger
 from copilot_cli.streamer.markdown import MarkdownStreamer, StreamOptions
 
@@ -68,7 +73,7 @@ def create_parser() -> argparse.ArgumentParser:
         "--model",
         type=str,
         help="Model to use for the chat",
-        default="gpt-4o",
+        default=None,
     )
     _ = parser.add_argument(
         "--system_prompt",
@@ -96,6 +101,19 @@ def create_parser() -> argparse.ArgumentParser:
         "--copy-to-clipboard",
         action="store_true",
         help="Copy the response to the clipboard",
+    )
+    _ = parser.add_argument(
+        "--mode",
+        type=str,
+        choices=["copilot", "ollama"],
+        default="copilot",
+        help="Backend to use for the chat",
+    )
+    _ = parser.add_argument(
+        "--ollama-host",
+        type=str,
+        default=os.getenv("OLLAMA_HOST", DEFAULT_OLLAMA_HOST),
+        help="Ollama server host (ollama mode only)",
     )
     return parser
 
@@ -141,7 +159,7 @@ def create_streamer(options: StreamOptions | None = None) -> MarkdownStreamer:
 
 
 def handle_completion(
-    client: GithubCopilotClient,
+    client: LLMClient,
     prompt: str,
     model: str,
     system_prompt: str,
@@ -181,7 +199,7 @@ def main() -> None:
     args = create_parser().parse_args()
     args = Args(**vars(args))
 
-    client = GithubCopilotClient()
+    client = create_client(args.mode, args.ollama_host)
 
     current_prompt: str = args.prompt or ""
     action_obj: Action | None = None
@@ -203,7 +221,10 @@ def main() -> None:
             current_prompt += f"\n{args.prompt}"
 
         system_prompt = action_obj.system_prompt
-        model = action_obj.model or args.model
+        if args.mode == "ollama":
+            model = args.model or DEFAULT_OLLAMA_MODEL
+        else:
+            model = action_obj.model or args.model or DEFAULT_COPILOT_MODEL
 
         try:
             current_prompt = process_action_commands(
@@ -215,7 +236,7 @@ def main() -> None:
             return
     else:
         system_prompt = args.system_prompt
-        model = args.model
+        model = args.model or (DEFAULT_OLLAMA_MODEL if args.mode == "ollama" else DEFAULT_COPILOT_MODEL)
 
     response = handle_completion(
         client,
